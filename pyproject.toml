@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "infra-sentinel"
+version = "1.0.0"
+description = "Infrastructure Governance & Audit Platform"
+author = ["Tanya"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

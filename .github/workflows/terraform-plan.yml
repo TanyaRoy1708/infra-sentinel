@@ -1,0 +1,12 @@
+name: Terraform Plan
+on:
+  pull_request:
+    paths:
+      - 'infra/**'
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: TF plan on infra PRs
+        run: echo "Running terraform plan"
