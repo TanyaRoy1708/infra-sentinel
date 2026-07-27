@@ -5,4 +5,4 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![AWS](https://img.shields.io/badge/AWS-Lambda%20%7C%20Cost%20Explorer-orange)
 ![Grafana](https://img.shields.io/badge/Grafana-10.4-red)
-![CI](https://github.com/yourhandle/infra-sentinel/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/TanyaRoy1708/infra-sentinel/actions/workflows/ci.yml/badge.svg)
