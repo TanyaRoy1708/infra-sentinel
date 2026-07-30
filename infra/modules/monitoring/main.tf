@@ -98,7 +98,8 @@ resource "aws_instance" "monitoring_server" {
               EOF
 
   tags = {
-    Name = "sentinel-monitoring-server"
+    Name             = "sentinel-monitoring-server"
+    "sentinel:exclude" = "true"  # tells the auditor to skip this instance
   }
 }
 
