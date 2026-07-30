@@ -1,0 +1,24 @@
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored — never commit it.
+
+aws_region = "us-east-1"
+
+# AWS Console → VPC → Your VPCs / Subnets (pick a public subnet)
+vpc_id    = "vpc-0123456789abcdef0"
+subnet_id = "subnet-0123456789abcdef0"
+
+# Your public IP + /32 — find it at https://whatismyip.com
+allowed_ip_cidr = "203.0.113.1/32"
+
+# AWS Console → EC2 → Key Pairs
+key_name = "my-personal-ssh-key"
+
+grafana_admin_password = "CHANGE_ME"
+
+# Create these two S3 buckets before running terraform apply
+tf_state_bucket_arn = "arn:aws:s3:::my-terraform-state-bucket"
+report_bucket_arn   = "arn:aws:s3:::my-sentinel-reports-bucket"
+report_bucket_name  = "my-sentinel-reports-bucket"
+
+scan_regions    = "us-east-1,us-west-2"
+lambda_zip_path = "../../../build/sentinel-auditor.zip"

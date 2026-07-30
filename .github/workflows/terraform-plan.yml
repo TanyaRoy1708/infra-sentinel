@@ -1,12 +1,63 @@
-name: Terraform Plan
+name: "Terraform CI"
+
 on:
   pull_request:
     paths:
-      - 'infra/**'
+      - "infra/**"
+
 jobs:
-  plan:
+  terraform-ci:
+    name: "Lint and Validate"
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    defaults:
+      run:
+        working-directory: infra/environments/personal
+
     steps:
-      - uses: actions/checkout@v3
-      - name: TF plan on infra PRs
-        run: echo "Running terraform plan"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (local backend for CI)
+        run: terraform init -backend=false
+
+      - name: Terraform Format Check
+        id: fmt
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Post Result to PR
+        uses: actions/github-script@v8
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fmt = "${{ steps.fmt.outcome }}";
+            const validate = "${{ steps.validate.outcome }}";
+            const body = [
+              "#### Terraform Format `" + fmt + "`",
+              "#### Terraform Validate `" + validate + "`",
+              "",
+              fmt === "failure"
+                ? "> Run `terraform fmt -recursive` locally to fix formatting."
+                : "",
+            ].join("\n");
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+      - name: Fail if validate failed
+        if: steps.validate.outcome == 'failure'
+        run: exit 1

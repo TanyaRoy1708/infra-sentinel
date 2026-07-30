@@ -1,4 +1,4 @@
-# 🛡️ infra-sentinel — Infrastructure Governance & Audit Platform
+# infra-sentinel - Infrastructure Governance & Audit Platform
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Terraform](https://img.shields.io/badge/Terraform-1.7-purple)
