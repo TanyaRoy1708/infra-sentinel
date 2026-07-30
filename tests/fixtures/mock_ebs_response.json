@@ -1,0 +1,32 @@
+{
+  "Volumes": [
+    {
+      "VolumeId": "vol-detached001",
+      "Size": 50,
+      "VolumeType": "gp2",
+      "State": "available",
+      "CreateTime": "2026-07-01T00:00:00+00:00",
+      "Tags": []
+    },
+    {
+      "VolumeId": "vol-excluded001",
+      "Size": 100,
+      "VolumeType": "gp3",
+      "State": "available",
+      "CreateTime": "2026-07-01T00:00:00+00:00",
+      "Tags": [
+        {"Key": "sentinel:exclude", "Value": "true"}
+      ]
+    },
+    {
+      "VolumeId": "vol-ttl001",
+      "Size": 20,
+      "VolumeType": "gp2",
+      "State": "available",
+      "CreateTime": "2026-07-01T00:00:00+00:00",
+      "Tags": [
+        {"Key": "TTL", "Value": "3d"}
+      ]
+    }
+  ]
+}

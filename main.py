@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         "scan_timestamp": datetime.now(timezone.utc).isoformat(),
         "regions_scanned": scan_regions,
         "total_findings": len(all_findings),
-        "findings": [f.__dict__ for f in all_findings],
+        "findings": [f.to_dict() for f in all_findings],
     }
 
     s3_key = f"reports/{datetime.now(timezone.utc).strftime('%Y/%m/%d')}/sentinel-report.json"
