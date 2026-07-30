@@ -1,0 +1,46 @@
+{
+  "Reservations": [
+    {
+      "Instances": [
+        {
+          "InstanceId": "i-idle001",
+          "InstanceType": "t3.micro",
+          "LaunchTime": "2026-07-01T00:00:00+00:00",
+          "State": {"Name": "running"},
+          "Tags": [
+            {"Key": "Environment", "Value": "dev"}
+          ]
+        },
+        {
+          "InstanceId": "i-healthy001",
+          "InstanceType": "t3.large",
+          "LaunchTime": "2026-07-29T00:00:00+00:00",
+          "State": {"Name": "running"},
+          "Tags": [
+            {"Key": "Owner", "Value": "team-infra"},
+            {"Key": "Environment", "Value": "production"},
+            {"Key": "aws:autoscaling:groupName", "Value": "prod-asg"}
+          ]
+        },
+        {
+          "InstanceId": "i-excluded001",
+          "InstanceType": "t3.micro",
+          "LaunchTime": "2026-06-01T00:00:00+00:00",
+          "State": {"Name": "running"},
+          "Tags": [
+            {"Key": "sentinel:exclude", "Value": "true"}
+          ]
+        },
+        {
+          "InstanceId": "i-ttl001",
+          "InstanceType": "t3.small",
+          "LaunchTime": "2026-07-01T00:00:00+00:00",
+          "State": {"Name": "running"},
+          "Tags": [
+            {"Key": "TTL", "Value": "3d"}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,19 +1,14 @@
 import boto3
 from .base import BaseAuditor, check_ttl_expired, get_tag
+from ..findings.model import Finding
 
 
 class EBSAuditor(BaseAuditor):
-    """
-    Scans for EBS volumes that are detached (not attached to any instance).
-    Also flags volumes whose TTL tag has expired.
-    Detached volumes still cost money every month based on their size.
-    """
 
     def _scan(self, region: str) -> list:
         ec2 = boto3.client("ec2", region_name=region)
         findings = []
 
-        # 'available' status means the volume is not attached to any instance
         paginator = ec2.get_paginator("describe_volumes")
         page_iterator = paginator.paginate(
             Filters=[{"Name": "status", "Values": ["available"]}]
@@ -25,32 +20,32 @@ class EBSAuditor(BaseAuditor):
                 size_gb = volume.get("Size")
                 vol_type = volume.get("VolumeType")
 
-                # Skip if intentionally excluded
                 if get_tag(volume, "sentinel:exclude"):
                     continue
 
-                # TTL check — volume promised to be gone by now
                 if check_ttl_expired(volume, created_at=volume.get("CreateTime")):
-                    findings.append({
-                        "resource_id": vol_id,
-                        "finding_type": "TTL_EXPIRED",
-                        "severity": "Warning",
-                        "confidence": 100,
-                        "reasons": [
+                    findings.append(Finding(
+                        resource_id=vol_id,
+                        finding_type="TTL_EXPIRED",
+                        severity="Warning",
+                        confidence=100,
+                        region=region,
+                        reasons=[
                             f"Volume {vol_id} is still present past its TTL tag expiry.",
                             f"Size: {size_gb} GB, Type: {vol_type}",
                         ],
-                    })
-                    continue  # TTL expiry is the finding — skip the generic one
+                    ))
+                    continue
 
-                findings.append({
-                    "resource_id": vol_id,
-                    "finding_type": "UNATTACHED_EBS_VOLUME",
-                    "severity": "Medium",
-                    "reasons": [
+                findings.append(Finding(
+                    resource_id=vol_id,
+                    finding_type="UNATTACHED_EBS_VOLUME",
+                    severity="Medium",
+                    region=region,
+                    reasons=[
                         "Volume is not attached to any instance.",
                         f"Size: {size_gb} GB, Type: {vol_type}",
                     ],
-                })
+                ))
 
         return findings

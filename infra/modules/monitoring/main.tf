@@ -43,6 +43,14 @@ resource "aws_security_group" "monitoring_sg" {
     cidr_blocks = [var.allowed_ip_cidr]
   }
 
+  ingress {
+    description = "Pushgateway"
+    from_port   = 9091
+    to_port     = 9091
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_ip_cidr]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

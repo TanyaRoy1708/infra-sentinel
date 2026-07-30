@@ -1,15 +1,30 @@
 name: CI
+
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [develop, main]
+
 jobs:
-  test:
+  lint-and-test:
+    name: "Lint and Test"
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Run lint and unit tests
-        run: echo "Lint and test on every PR to develop"
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest flake8
+
+      - name: Lint
+        run: flake8 sentinel/ main.py --max-line-length=120
+
+      - name: Run Tests
+        run: pytest tests/ -v
